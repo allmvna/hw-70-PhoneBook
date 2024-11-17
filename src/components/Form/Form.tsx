@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid2";
 import {useAppDispatch} from "../../app/hooks.ts";
 import {addContact} from "../../containers/slices/sliceContact/sliceContact.tsx";
 import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 const contact = {
     name: '',
@@ -12,10 +13,9 @@ const contact = {
 };
 
 const Form = () => {
-    const dispatch = useAppDispatch();
-
     const [formData, setFormData] = useState(contact);
-
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -25,14 +25,12 @@ const Form = () => {
         }));
     };
 
-
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await dispatch(addContact(formData));
+        navigate('/');
         setFormData(contact);
     };
-
-
 
     return (
         <>
@@ -122,6 +120,20 @@ const Form = () => {
                             required
                         />
                     </Grid>
+                    {formData.photo && (
+                        <Grid size={12} sx={{ textAlign: "center"}}>
+                            <img
+                                src={formData.photo}
+                                alt="Contact Photo"
+                                style={{
+                                    maxWidth: "200px",
+                                    maxHeight: "200px",
+                                    borderRadius: "5px",
+                                    border: "1px solid #052f46",
+                                }}
+                            />
+                        </Grid>
+                    )}
                     <Grid size={12} sx={{ textAlign: "center" }}>
                         <Button
                             size="large"

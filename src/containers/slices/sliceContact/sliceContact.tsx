@@ -21,9 +21,23 @@ const initialState : ContactState = {
     error: false,
 };
 
+interface ContactsResponse {
+    [id: string]: IContact;
+}
+
 export const addContact = createAsyncThunk('contact/addContact', async (contact: IContact) => {
     const { data } = await axiosAPI.post('/contacts.json', contact);
     return { id: data.name, ...contact };
+});
+
+export const fetchContact = createAsyncThunk('contact/fetchContact', async () => {
+    const { data } = await axiosAPI.get<ContactsResponse>('contacts.json');
+
+    return Object.entries(data).map(([key, value]) => ({
+        id: key,
+        ...(value),
+    }));
+
 });
 
 
@@ -42,6 +56,18 @@ export const sliceContact = createSlice({
                 state.contacts.push(action.payload);
             })
             .addCase(addContact.rejected, (state) => {
+                state.isLoading = false;
+                state.error = true;
+            })
+            .addCase(fetchContact.pending, (state) => {
+            state.isLoading = true;
+            state.error = false;
+        })
+            .addCase(fetchContact.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.contacts = action.payload;
+            })
+            .addCase(fetchContact.rejected, (state) => {
                 state.isLoading = false;
                 state.error = true;
             });
