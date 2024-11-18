@@ -2,6 +2,7 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {toggleModal} from "../../containers/slices/sliceModal/sliceModal.tsx";
 import {Box, Button, Modal, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import {deleteContact} from "../../containers/slices/sliceContact/sliceContact.tsx";
 
 const ContactModal = () => {
     const { isModalOpen, selectedContact } = useAppSelector((state) => state.modal);
@@ -11,6 +12,12 @@ const ContactModal = () => {
     const handleClose = () => {
         dispatch(toggleModal(false));
     };
+
+    const deleteThisContact = (id: string) => {
+        dispatch(deleteContact(id));
+        dispatch(toggleModal(false));
+    };
+
 
     return (
         <>
@@ -63,7 +70,12 @@ const ContactModal = () => {
                             <Button variant="contained" color="primary" sx={{ mt: 2, mr: 2}}>
                                 Edit
                             </Button>
-                            <Button variant="contained" color="error" sx={{ mt: 2 }}>
+                            <Button
+                                variant="contained"
+                                color="error"
+                                sx={{ mt: 2 }}
+                                onClick={() => deleteThisContact(selectedContact.id)}
+                            >
                                 Delete
                             </Button>
                         </>

@@ -2,6 +2,7 @@ import axiosAPI from "../../../axiosAPI.ts";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 export interface IContact {
+    id: string;
     name: string;
     phone: string;
     email: string;
@@ -27,19 +28,22 @@ interface ContactsResponse {
 
 export const addContact = createAsyncThunk('contact/addContact', async (contact: IContact) => {
     const { data } = await axiosAPI.post('/contacts.json', contact);
-    return { id: data.name, ...contact };
+    return { ...contact, id: data.name };
 });
 
 export const fetchContact = createAsyncThunk('contact/fetchContact', async () => {
     const { data } = await axiosAPI.get<ContactsResponse>('contacts.json');
 
     return Object.entries(data).map(([key, value]) => ({
+        ...value,
         id: key,
-        ...(value),
     }));
-
 });
 
+export const deleteContact = createAsyncThunk('contact/deleteContact', async (id: string) => {
+    await axiosAPI.delete(`/contacts/${id}.json`);
+    return id;
+});
 
 export const sliceContact = createSlice({
     name: 'contact',
@@ -62,12 +66,24 @@ export const sliceContact = createSlice({
             .addCase(fetchContact.pending, (state) => {
             state.isLoading = true;
             state.error = false;
-        })
+            })
             .addCase(fetchContact.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.contacts = action.payload;
             })
             .addCase(fetchContact.rejected, (state) => {
+                state.isLoading = false;
+                state.error = true;
+            })
+            .addCase(deleteContact.pending, (state) => {
+            state.isLoading = true;
+            state.error = false;
+            })
+            .addCase(deleteContact.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.contacts = state.contacts.filter(contact => contact.id !== action.payload);
+            })
+            .addCase(deleteContact.rejected, (state) => {
                 state.isLoading = false;
                 state.error = true;
             });

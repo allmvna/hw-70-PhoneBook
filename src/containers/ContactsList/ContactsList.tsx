@@ -71,17 +71,6 @@ const ContactsList = () => {
                                         {contact.name}
                                     </Typography>
                                 </Grid>
-                                <Grid size={9}
-                                      sx={{
-                                          textAlign: "left",
-                                      }}>
-                                    <Typography sx={{fontSize: 16, marginBottom: 2}}>
-                                        <strong>Phone: </strong>{contact.phone}
-                                    </Typography>
-                                    <Typography sx={{fontSize: 16, marginBottom: 2}}>
-                                        <strong>Email: </strong>{contact.email}
-                                    </Typography>
-                                </Grid>
                             </CardContent>
                         </Card>
                     </Grid>
