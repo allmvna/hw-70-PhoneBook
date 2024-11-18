@@ -98,6 +98,7 @@ const ContactModal = () => {
                                 sx={{ mt: 2 }}
                                 onClick={() => deleteThisContact(selectedContact.id)}
                             >
+                                Delete
                             </Button>
                         </>
                     )}
