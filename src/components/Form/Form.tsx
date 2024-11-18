@@ -1,11 +1,11 @@
 import {Button, TextField, Typography,} from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import {useAppDispatch} from "../../app/hooks.ts";
-import {addContact} from "../../containers/slices/sliceContact/sliceContact.tsx";
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
+import {addContact, IContact, updateContact} from "../../containers/slices/sliceContact/sliceContact.tsx";
+import React, {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 
-const contact = {
+const initialContact = {
     name: '',
     phone: '',
     email: '',
@@ -13,9 +13,20 @@ const contact = {
 };
 
 const Form = () => {
-    const [formData, setFormData] = useState(contact);
+    const { id } = useParams();
+    const [formData, setFormData] = useState(initialContact);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const contacts = useAppSelector(state => state.phonebook.contacts);
+    const contact = contacts.find(c => c.id === id);
+
+
+    useEffect(() => {
+        if (id && contact) {
+            setFormData(contact);
+        }
+    }, [id, contact]);
+
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -27,18 +38,21 @@ const Form = () => {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await dispatch(addContact(formData));
+        const contactData: IContact = { ...formData, id: id || '' };
+
+        if (id) {
+            await dispatch(updateContact(contactData));
+        } else {
+            await dispatch(addContact(contactData));
+        }
         navigate('/');
-        setFormData(contact);
+        setFormData(initialContact);
     };
 
     return (
         <>
-            <Typography
-                sx={{ mb: 2, textAlign: "center", color: "#112735" }}
-                variant="h4"
-            >
-              Add new contact
+            <Typography sx={{ mb: 2, textAlign: "center", color: "#112735" }} variant="h4">
+                {id ? 'Edit Contact' : 'Add New Contact'}
             </Typography>
             <form onSubmit={onSubmit}>
                 <Grid

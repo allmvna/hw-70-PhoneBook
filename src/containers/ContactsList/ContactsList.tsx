@@ -29,7 +29,7 @@ const ContactsList = () => {
             </Typography>
             <Grid container spacing={2}>
                 {contacts.map((contact) => (
-                    <Grid size={12} key={contact.name}>
+                    <Grid size={4} key={contact.id}>
                         <Card
                             sx={{
                                 minWidth: 275,
@@ -49,7 +49,7 @@ const ContactsList = () => {
                                     alignItems: "center",
                                 }}
                             >
-                                <Grid size={3}
+                                <Grid size={12}
                                       sx={{
                                           display: "flex",
                                           alignItems: "center"
@@ -59,8 +59,8 @@ const ContactsList = () => {
                                             src={contact.photo}
                                             alt={contact.name}
                                             style={{
-                                                width: "100px",
-                                                height: "100px",
+                                                width: "200px",
+                                                height: "200px",
                                                 borderRadius: "50%",
                                                 objectFit: "cover",
                                                 marginRight: "10px",

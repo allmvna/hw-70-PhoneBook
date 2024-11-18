@@ -45,6 +45,12 @@ export const deleteContact = createAsyncThunk('contact/deleteContact', async (id
     return id;
 });
 
+export const updateContact = createAsyncThunk('contact/updateContact', async (contact: IContact) => {
+    await axiosAPI.put(`/contacts/${contact.id}.json`, contact);
+    return contact;
+});
+
+
 export const sliceContact = createSlice({
     name: 'contact',
     initialState,
@@ -84,6 +90,22 @@ export const sliceContact = createSlice({
                 state.contacts = state.contacts.filter(contact => contact.id !== action.payload);
             })
             .addCase(deleteContact.rejected, (state) => {
+                state.isLoading = false;
+                state.error = true;
+            })
+            .addCase(updateContact.pending, (state) => {
+                state.isLoading = true;
+                state.error = false;
+            })
+            .addCase(updateContact.fulfilled, (state, action) => {
+                state.isLoading = false;
+
+                const index = state.contacts.findIndex(contact => contact.id === action.payload.id);
+                if (index !== -1) {
+                    state.contacts[index] = action.payload;
+                }
+            })
+            .addCase(updateContact.rejected, (state) => {
                 state.isLoading = false;
                 state.error = true;
             });

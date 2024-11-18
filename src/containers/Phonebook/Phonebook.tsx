@@ -13,6 +13,7 @@ const Phonebook = () => {
                 <Routes>
                     <Route path="/" element={<ContactsList />} />
                     <Route path="/new_contact" element={<NewContact />} />
+                    <Route path="/:id/edit" element={<NewContact />} />
                     <Route
                         path="*"
                         element={<Alert severity="error">Not found</Alert>}

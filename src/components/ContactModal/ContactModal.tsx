@@ -1,12 +1,13 @@
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {toggleModal} from "../../containers/slices/sliceModal/sliceModal.tsx";
-import {Box, Button, Modal, Typography} from "@mui/material";
+import {Box, Button, IconButton, Modal, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import CloseIcon from '@mui/icons-material/Close';
 import {deleteContact} from "../../containers/slices/sliceContact/sliceContact.tsx";
+import {NavLink} from "react-router-dom";
 
 const ContactModal = () => {
     const { isModalOpen, selectedContact } = useAppSelector((state) => state.modal);
-
     const dispatch = useAppDispatch();
 
     const handleClose = () => {
@@ -36,10 +37,23 @@ const ContactModal = () => {
                         backgroundColor: 'white',
                         boxShadow: 24,
                         p: 4,
+                        width: '500px',
                     }}
                 >
                     {selectedContact && (
                         <>
+                            <IconButton
+                                onClick={handleClose}
+                                sx={{
+                                    position: 'absolute',
+                                    top: 8,
+                                    right: 8,
+                                    color: 'gray',
+                                }}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+
                             <Grid container spacing={2}>
                                 <Grid size={4}>
                                     {selectedContact.photo && (
@@ -67,7 +81,14 @@ const ContactModal = () => {
                                     </Typography>
                                 </Grid>
                             </Grid>
-                            <Button variant="contained" color="primary" sx={{ mt: 2, mr: 2}}>
+                            <Button
+                                component={NavLink}
+                                to={`/${selectedContact.id}/edit`}
+                                variant="contained"
+                                color="primary"
+                                sx={{ mt: 2, mr: 2}}
+                                onClick={handleClose}
+                            >
                                 Edit
                             </Button>
                             <Button
