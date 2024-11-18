@@ -3,6 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import {Alert} from "@mui/material";
 import Layout from "../../UI/Layout/Layout.tsx";
 import ContactsList from "../ContactsList/ContactsList.tsx";
+import ContactModal from "../../components/ContactModal/ContactModal.tsx";
 
 
 const Phonebook = () => {
@@ -17,6 +18,7 @@ const Phonebook = () => {
                         element={<Alert severity="error">Not found</Alert>}
                     />
                 </Routes>
+                <ContactModal />
             </Layout>
         </>
     );

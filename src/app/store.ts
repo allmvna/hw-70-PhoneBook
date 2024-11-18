@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {contactReducer} from "../containers/slices/sliceContact/sliceContact.tsx";
+import {modalReducer} from "../containers/slices/sliceModal/sliceModal.tsx";
 
 export const store = configureStore({
   reducer: {
-    phonebook: contactReducer
+    phonebook: contactReducer,
+    modal: modalReducer,
   },
 });
 
