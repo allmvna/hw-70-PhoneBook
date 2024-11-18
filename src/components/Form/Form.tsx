@@ -1,4 +1,4 @@
-import {Button, TextField, Typography,} from "@mui/material";
+import {Button, CircularProgress, TextField, Typography,} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {addContact, IContact, updateContact} from "../../containers/slices/sliceContact/sliceContact.tsx";
@@ -19,6 +19,7 @@ const Form = () => {
     const navigate = useNavigate();
     const contacts = useAppSelector(state => state.phonebook.contacts);
     const contact = contacts.find(c => c.id === id);
+    const { isLoading } = useAppSelector((state) => state.phonebook);
 
 
     useEffect(() => {
@@ -159,8 +160,9 @@ const Form = () => {
                                     backgroundImage: "linear-gradient(90deg, #0a4666, #052f46)",
                                 },
                             }}
+                            disabled={isLoading}
                         >
-                            Save
+                            {isLoading ? <CircularProgress size={20} sx={{ color: "white" }} /> : 'Save'}
                         </Button>
                     </Grid>
                 </Grid>

@@ -37,7 +37,8 @@ const ContactModal = () => {
                         backgroundColor: 'white',
                         boxShadow: 24,
                         p: 4,
-                        width: '500px',
+                        width: '90%',
+                        maxWidth: '500px',
                     }}
                 >
                     {selectedContact && (
@@ -97,7 +98,6 @@ const ContactModal = () => {
                                 sx={{ mt: 2 }}
                                 onClick={() => deleteThisContact(selectedContact.id)}
                             >
-                                Delete
                             </Button>
                         </>
                     )}

@@ -1,14 +1,16 @@
-import {Card, CardContent, Typography} from "@mui/material";
+import {Alert, Card, CardContent, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {useEffect} from "react";
 import {fetchContact} from "../slices/sliceContact/sliceContact.tsx";
 import {Contact, setSelectedContact, toggleModal} from "../slices/sliceModal/sliceModal.tsx";
+import Loader from "../../UI/Loader/Loader.tsx";
 
 
 const ContactsList = () => {
     const { contacts } = useAppSelector((state) => state.phonebook);
     const dispatch = useAppDispatch();
+    const { isLoading, error } = useAppSelector((state) => state.phonebook);
 
     useEffect(() => {
         dispatch(fetchContact());
@@ -27,6 +29,11 @@ const ContactsList = () => {
             >
                 Contacts
             </Typography>
+            {isLoading ? (
+                <Loader />
+            ) : error ? (
+                <Alert severity="error">No data. Try again!</Alert>
+            ) : (
             <Grid container spacing={2}>
                 {contacts.map((contact) => (
                     <Grid size={4} key={contact.id}>
@@ -76,6 +83,7 @@ const ContactsList = () => {
                     </Grid>
                 ))}
             </Grid>
+            )}
         </>
     );
 };
